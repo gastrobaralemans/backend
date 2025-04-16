@@ -1,5 +1,6 @@
 package com.gastrobar_alemans_backend.model;
 import jakarta.persistence.*;
+
 @Entity
 @Table(name = "personas")
 public class Person {
@@ -11,8 +12,8 @@ public class Person {
 
     @Column(unique = true)
     private String correo;
-    @Column(unique = true)
-    private String contra;
+
+    private String contraseña;
 
     public String getNombre() {
         return nombre;
@@ -26,10 +27,10 @@ public class Person {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
-    public String getContra(){
-        return contra;
+    public String getContraseña(){
+        return contraseña;
     }
-    public void setContra(String contra) {
-        this.contra = contra;
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 }

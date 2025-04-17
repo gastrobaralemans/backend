@@ -17,7 +17,7 @@ public class RegisterController {
     public String register(@RequestBody Person persona) {
         return personRepo.findByCorreo(persona.getCorreo())
                 .filter(p -> p.getCorreo().equals(persona.getCorreo()) &&
-                        p.getContraseña().equals(persona.getContraseña()))
+                        p.getPass().equals(persona.getPass()))
                 .map(p -> "te registraste")
                 .orElse("error en credenciales");
     }

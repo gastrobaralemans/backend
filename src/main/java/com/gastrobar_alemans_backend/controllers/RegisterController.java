@@ -1,11 +1,16 @@
 package com.gastrobar_alemans_backend.controllers;
-
+import com.gastrobar_alemans_backend.model.RegisterModel;
 import com.gastrobar_alemans_backend.model.Person;
 import com.gastrobar_alemans_backend.repository.PersonRepository;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/api/register")
-@CrossOrigin(origins = {"http://localhost:3000"})
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = {"http://localhost:5173"})
 public class RegisterController {
     private final PersonRepository personRepo;
 
@@ -14,11 +19,21 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody Person persona) {
-        return personRepo.findByCorreo(persona.getCorreo())
-                .filter(p -> p.getCorreo().equals(persona.getCorreo()) &&
-                        p.getPass().equals(persona.getPass()))
-                .map(p -> "te registraste")
-                .orElse("error en credenciales");
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterModel request) {
+        System.out.println("REGISTER REQUEST: " + request);
+
+        Optional<Person> existingPerson = personRepo.findByCorreo(request.getCorreo());
+        if (existingPerson.isPresent()) {
+            return ResponseEntity.badRequest().body("El correo ya está registrado");
+        }
+            Person newPerson = new Person();
+            newPerson.setNombre(request.getNombre());
+            newPerson.setCorreo(request.getCorreo());
+            newPerson.setPass(request.getPass());
+
+        personRepo.save(newPerson);
+
+        return ResponseEntity.ok("Registro exitoso");
+
     }
 }

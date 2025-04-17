@@ -30,7 +30,6 @@ public class AuthController {
             return ResponseEntity.status(401).body("Correo no registrado");
         }
 
-        // Validación básica solo para el admin temporal
         if (!request.getCorreo().equals("admin@admin.com") || !request.getPass().equals("admin123")) {
             return ResponseEntity.status(401).body("Credenciales incorrectas");
         }

@@ -7,6 +7,8 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
+    private String Rol;
 
     private String nombre;
 
@@ -14,7 +16,8 @@ public class Person {
     private String correo;
 
     private String pass;
-
+    public String getRol() {return Rol;}
+    public void setRol(String Rol) {this.Rol = Rol;}
     public String getNombre() {
         return nombre;
     }
@@ -33,4 +36,6 @@ public class Person {
     public void setPass(String pass) {
         this.pass = pass;
     }
+
+
 }

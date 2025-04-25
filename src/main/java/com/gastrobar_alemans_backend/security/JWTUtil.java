@@ -1,6 +1,7 @@
 package com.gastrobar_alemans_backend.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -38,4 +39,9 @@ public class JWTUtil {
             return null;
         }
     }
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        String correo = validateTokenAndRetrieveSubject(token);
+        return correo != null && correo.equals(userDetails.getUsername());
+    }
+
 }

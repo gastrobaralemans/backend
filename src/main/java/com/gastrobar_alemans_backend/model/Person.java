@@ -16,6 +16,7 @@ public class Person {
     private String correo;
 
     private String pass;
+    public Long getId() {return id;}
     public String getRol() {return Rol;}
     public void setRol(String Rol) {this.Rol = Rol;}
     public String getNombre() {

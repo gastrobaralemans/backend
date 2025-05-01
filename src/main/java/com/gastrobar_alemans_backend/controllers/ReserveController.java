@@ -54,6 +54,7 @@ public class ReserveController {
             if (reservaDTO.getFecha().toLocalDate().isBefore(ahora.plusDays(1).toLocalDate())) {
                 return ResponseEntity.badRequest().body("reservar al menos con un dia de anticipacion");
             }
+
             Reserve nuevaReserva = new Reserve();
             nuevaReserva.setNombre(usuario.getNombre());
             nuevaReserva.setCorreo(usuario.getCorreo());

@@ -1,23 +1,59 @@
 package com.gastrobar_alemans_backend.controllers;
 
 import com.gastrobar_alemans_backend.DTO.MenuCategoryDTO;
-import com.gastrobar_alemans_backend.DTO.MenuService;
+import com.gastrobar_alemans_backend.DTO.PromoDTO;
+import com.gastrobar_alemans_backend.service.MenuService;
+import com.gastrobar_alemans_backend.model.MenuItemMODEL;
+import com.gastrobar_alemans_backend.model.MenuItemPromo;
+import com.gastrobar_alemans_backend.repository.MenuItemRepository;
+import com.gastrobar_alemans_backend.repository.MenuItemPromoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/menu")
 @RequiredArgsConstructor
 public class MenuController {
     private final MenuService menuService;
+    private final MenuItemRepository menuItemRepository;
+    private final MenuItemPromoRepository promoRepository;
 
     @GetMapping
     public ResponseEntity<List<MenuCategoryDTO>> getMenu() {
-        return ResponseEntity.ok(menuService.getFullMenu());
+        List<MenuCategoryDTO> menu = menuService.getFullMenu();
+        System.out.println("MENÚ FINAL ENVIADO: " + menu);
+        return ResponseEntity.ok(menu);
     }
+    @PreAuthorize("hasRole('admin')")
+    @PutMapping("/{id}/promo")
+    public ResponseEntity<?> updatePromo(@PathVariable Long id, @RequestBody PromoDTO promoDTO) {
+        Optional<MenuItemMODEL> itemOpt = menuItemRepository.findById(id);
+        if (itemOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Platillo no encontrado");
+        }
+
+        MenuItemMODEL item = itemOpt.get();
+        MenuItemPromo promo = promoRepository.findByMenuItemId(item.getId()).orElse(new MenuItemPromo());
+        promo.setMenuItem(item);
+        promo.setPromoPrice(promoDTO.getPromoPrice());
+        promo.setPromoDescription(promoDTO.getPromoDescription());
+        promo.setStartDate(promoDTO.getPromoStartDate());
+        promo.setEndDate(promoDTO.getPromoEndDate());
+        promo.setActive(true);
+
+        promoRepository.save(promo);
+        return ResponseEntity.ok("Promo creada/actualizada");
+    }
+    @DeleteMapping("/{id}/promo")
+    public ResponseEntity<?> deletePromo(@PathVariable Long id) {
+        promoRepository.deleteByMenuItemId(id);
+        return ResponseEntity.ok("Promo eliminada");
+    }
+
 }

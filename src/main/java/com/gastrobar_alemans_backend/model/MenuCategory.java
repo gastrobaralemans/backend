@@ -2,7 +2,6 @@ package com.gastrobar_alemans_backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.awt.*;
 import java.util.List;
 
 @Entity
@@ -15,6 +14,7 @@ public class MenuCategory {
     private Long id;
 
     private String name;
-    @OneToMany(mappedBy = "category")
-    private List<MenuItem> items;
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<MenuItemMODEL> items;
+
 }

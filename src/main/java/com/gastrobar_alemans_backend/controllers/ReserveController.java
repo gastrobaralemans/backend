@@ -74,7 +74,7 @@ public class ReserveController {
             return ResponseEntity.internalServerError().body("Error interno: " + e.getMessage());
         }
     }
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('admin')")
     @GetMapping
     public List<Reserve> listarReservas() {
         return reserveRepository.findAll();

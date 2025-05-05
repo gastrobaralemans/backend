@@ -15,7 +15,7 @@ public class PersonController {
     @Autowired
     private PersonRepository personRepository;
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('admin')")
     @GetMapping
     public List<Map<String, Object>> listarPersonas() {
         return personRepository.findAll().stream()

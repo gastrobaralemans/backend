@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface MenuCategoryRepository extends JpaRepository<MenuCategory, Long> {
-    @Query("SELECT c FROM MenuCategory c JOIN FETCH c.items i WHERE i.active = true")
+    @Query("SELECT DISTINCT c FROM MenuCategory c JOIN FETCH c.items i WHERE i.active = true")
     List<MenuCategory> findAllWithItems();
 }

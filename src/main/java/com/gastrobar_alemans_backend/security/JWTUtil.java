@@ -10,7 +10,7 @@ import java.util.Date;
 public class JWTUtil {
 
     private static final String secureToken = "tokenlogin";
-    private static final long ACCESS_TOKEN_DURATION = 5 * 60 * 1000;
+    private static final long ACCESS_TOKEN_DURATION = 15 * 60 * 1000;
     private static final long REFRESH_TOKEN_DURATION = 7 * 24 * 60 * 60 * 1000;
 
     public String generateToken(String correo) {

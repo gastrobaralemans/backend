@@ -1,0 +1,74 @@
+[33mcommit 412fc5db3fa7cc047fa7123b00cb1c953b0199cb[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Thu May 1 17:28:38 2025 -0600
+
+    reservas funcionando al 100 (incluyendo en admin)
+
+[33mcommit 943cfd44d990de5675853a2591b7e6fa79c4f021[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Fri Apr 25 16:16:16 2025 -0600
+
+    reservas funcionando al 100 (incluyendo en admin)
+
+[33mcommit 25796b1c18ecca42346e3c1cec34a9ee10e116ea[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Wed Apr 23 18:16:28 2025 -0600
+
+    access refresh tokens o sesiones funcionando al 100
+
+[33mcommit 841886027f473e41a3159f8174fc91af0424f075[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Mon Apr 21 17:08:59 2025 -0600
+
+    menu funcionando
+
+[33mcommit 0aa6d838844ff98629b835a8f00eb9b31b83a2a1[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Thu Apr 17 19:47:55 2025 -0600
+
+    registra eventos
+
+[33mcommit 4f4db5231ac0d9eb468765c9628ecf37a84488d7[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Thu Apr 17 00:32:47 2025 -0600
+
+    registro funcionando (falta muchas cosas en forms pero eso va pa despues)
+
+[33mcommit 75bf817a369346616d45900b18afe809980e7ad9[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Wed Apr 16 23:35:59 2025 -0600
+
+    alfin funciono
+
+[33mcommit 4564f7e4e4c96bdaedb5d1d55ed725673096494c[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Tue Apr 15 21:22:54 2025 -0600
+
+    entitys, modifided somes structures
+
+[33mcommit 37a3a947d04c510ab917942d11d4ab54210e441e[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Mon Apr 14 22:30:11 2025 -0600
+
+    entire, repository and database conection
+
+[33mcommit 26dda762e02f1ddbad3edecbc6fff81fca75b826[m
+Merge: 8298c76 1d8bca4
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Mon Apr 14 18:40:41 2025 -0600
+
+    Merge branch 'main' of https://github.com/gastrobaralemans/backend
+
+[33mcommit 8298c761e6d640b28fb14d56a2d5dfcf7e7124ba[m
+Author: JosueGarcia04 <josueadrian042006@gmail.com>
+Date:   Mon Apr 14 18:38:10 2025 -0600
+
+    first
+
+[33mcommit 1d8bca437045603c92948d1137419e14c924e908[m
+Author: cChristian2 <christian.renderoos@gmail.com>
+Date:   Sun Mar 16 14:02:12 2025 -0600
+
+    Create README.md
+    
+    Prueba 🥈

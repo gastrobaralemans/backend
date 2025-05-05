@@ -8,7 +8,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuItem {
+@Table(name = "menu_item")
+public class MenuItemMODEL {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,4 +31,10 @@ public class MenuItem {
 
     @OneToMany(mappedBy = "menuItem")
     private List<MenuItemPromo> promos;
+    @Transient
+    private BigDecimal promoPrice;
+
+    public boolean isActive() {
+        return Boolean.TRUE.equals(this.active);
+    }
 }

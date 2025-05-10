@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface ReserveRepository extends JpaRepository<Reserve, Long> {
     List<Reserve> findByCorreoAndEstadoIn(String correo, List<String> pendiente);
-    boolean existsByNumero(String numero);
+    boolean existsByNumeroAndEstadoIn(String numero, List<String> estados);
+
 }

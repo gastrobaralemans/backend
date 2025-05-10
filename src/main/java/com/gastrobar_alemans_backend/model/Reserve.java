@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reservas_eventos")
+@Table(name = "reserva_eventos")
 public class Reserve {
 
     @Id
@@ -12,11 +12,7 @@ public class Reserve {
     private Long id;
 
     private String nombre;
-
-    @Column(unique = true)
     private String correo;
-
-    @Column(unique = true)
     private String numero;
 
     private LocalDateTime fecha;
@@ -25,6 +21,9 @@ public class Reserve {
     private String comentarios;
     private String tipoEvento;
     private String estado = "pendiente";
+    @ManyToOne
+    @JoinColumn(name = "person_id")
+    private Person usuario;
 
     public Reserve() {
     }
@@ -115,5 +114,12 @@ public class Reserve {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public Person getUsuario() {
+        return usuario;
+    }
+    public void setUsuario(Person usuario) {
+        this.usuario = usuario;
     }
 }

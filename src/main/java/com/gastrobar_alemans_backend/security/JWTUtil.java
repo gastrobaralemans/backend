@@ -36,9 +36,11 @@ public class JWTUtil {
                     .verify(token)
                     .getSubject();
         } catch (Exception e) {
+            System.out.println("Error al validar token: " + e.getMessage());
             return null;
         }
     }
+
     public boolean isTokenValid(String token, UserDetails userDetails) {
         String correo = validateTokenAndRetrieveSubject(token);
         return correo != null && correo.equals(userDetails.getUsername());

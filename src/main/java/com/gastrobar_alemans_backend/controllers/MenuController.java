@@ -30,7 +30,7 @@ public class MenuController {
         System.out.println("MENÚ FINAL ENVIADO: " + menu);
         return ResponseEntity.ok(menu);
     }
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/promo")
     public ResponseEntity<?> updatePromo(@PathVariable Long id, @RequestBody PromoDTO promoDTO) {
         Optional<MenuItemMODEL> itemOpt = menuItemRepository.findById(id);

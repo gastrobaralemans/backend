@@ -45,7 +45,7 @@ public class MenuService {
                                 promoDescription = promo.getPromoDescription();
                                 startDate = promo.getStartDate();
                                 endDate = promo.getEndDate();
-                            } else {
+                            } else if (now.isAfter(promo.getEndDate())){
                                 promo.setActive(false);
                                 promoRepository.save(promo);
                             }

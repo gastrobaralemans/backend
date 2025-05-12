@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface MenuItemPromoRepository extends JpaRepository<MenuItemPromo, Long> {
 
-    @Query("SELECT p FROM MenuItemPromo p WHERE p.menuItem.id = :menuItemId AND CURRENT_DATE BETWEEN p.startDate AND p.endDate AND p.active = true")
+    @Query("SELECT p FROM MenuItemPromo p WHERE p.menuItem.id = :menuItemId AND CURRENT_TIMESTAMP BETWEEN p.startDate AND p.endDate AND p.active = true")
     Optional<MenuItemPromo> findActivePromo(Long menuItemId);
 
 

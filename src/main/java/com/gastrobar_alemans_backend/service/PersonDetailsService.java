@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonDetailsService implements UserDetailsService {
@@ -22,10 +23,12 @@ public class PersonDetailsService implements UserDetailsService {
         Person person = personRepository.findByCorreo(correo)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
 
+        String rol = Optional.ofNullable(person.getRol()).orElse("usuario").toUpperCase();
         return new org.springframework.security.core.userdetails.User(
                 person.getCorreo(),
                 person.getPass(),
-                List.of(new SimpleGrantedAuthority("ROLE_" + person.getRol().toUpperCase()))
+                List.of(new SimpleGrantedAuthority("ROLE_" + rol))
         );
+
     }
 }

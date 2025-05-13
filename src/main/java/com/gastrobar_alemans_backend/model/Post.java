@@ -11,9 +11,11 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(length=255)
     private String titulo;
+    @Column(columnDefinition = "text")
     private String imagen;
+    @Column(columnDefinition = "text")
     private String descripcion;
     private LocalDateTime fecha = LocalDateTime.now();
 

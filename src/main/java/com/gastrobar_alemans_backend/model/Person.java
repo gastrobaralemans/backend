@@ -18,7 +18,7 @@ public class Person {
     private String pass;
     public Long getId() {return id;}
     public String getRol() {return rol;}
-    public void setRol(String Rol) {this.rol = rol;}
+    public void setRol(String rol) {this.rol = rol;}
     public String getNombre() {
         return nombre;
     }

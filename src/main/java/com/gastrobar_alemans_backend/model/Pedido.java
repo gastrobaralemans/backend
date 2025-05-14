@@ -19,7 +19,8 @@ public class Pedido {
 
     private LocalDateTime fecha = LocalDateTime.now();
 
-    private String estado = "Pendiente";
+    @Enumerated(EnumType.STRING)
+    private EstadoPedido estado = EstadoPedido.PENDIENTE;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id")

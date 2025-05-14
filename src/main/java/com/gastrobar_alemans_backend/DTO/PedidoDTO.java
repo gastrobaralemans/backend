@@ -19,19 +19,23 @@ public class PedidoDTO {
     public static class DetalleDTO {
         private String nombrePlatillo;
         private int cantidad;
+        private double precio;
+
     }
 
     public static PedidoDTO fromEntity(Pedido pedido) {
         PedidoDTO dto = new PedidoDTO();
         dto.setId(pedido.getId());
         dto.setFecha(pedido.getFecha());
-        dto.setEstado(pedido.getEstado());
+        dto.setEstado(pedido.getEstado().name());
+
         dto.setCliente(pedido.getCliente() != null ? pedido.getCliente().getNombre() : "Anonimo");
 
         dto.setDetalles(pedido.getDetalles().stream().map(detalle -> {
             DetalleDTO d = new DetalleDTO();
             d.setNombrePlatillo(detalle.getPlatillo().getName());
             d.setCantidad(detalle.getCantidad());
+            d.setPrecio(detalle.getPlatillo().getPrice().doubleValue());
             return d;
         }).collect(Collectors.toList()));
 

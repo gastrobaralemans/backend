@@ -2,9 +2,8 @@ package com.gastrobar_alemans_backend.controllers;
 
 import com.gastrobar_alemans_backend.DTO.PedidoDTO;
 import com.gastrobar_alemans_backend.model.*;
-import com.gastrobar_alemans_backend.repository.MenuItemRepository;
-import com.gastrobar_alemans_backend.repository.PedidoRepository;
-import com.gastrobar_alemans_backend.repository.PersonRepository;
+import com.gastrobar_alemans_backend.repository.*;
+import com.gastrobar_alemans_backend.service.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,11 +22,11 @@ public class PedidoController {
     private final MenuItemRepository menuItemRepository;
     private final PedidoRepository pedidoRepository;
     private final PersonRepository personRepository;
+    private final PedidoService pedidoService;
 
     @PostMapping
     public ResponseEntity<?> crearPedido(@RequestBody PedidoRequest pedidoReq,
                                          @AuthenticationPrincipal UserDetails user) {
-
         Person cliente = personRepository.findByCorreo(user.getUsername()).orElseThrow();
 
         Pedido pedido = new Pedido();
@@ -49,6 +48,7 @@ public class PedidoController {
 
         return ResponseEntity.ok("Pedido creado");
     }
+
     @PutMapping("/{id}/entregado")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> marcarComoEntregado(@PathVariable Long id) {
@@ -65,6 +65,7 @@ public class PedidoController {
                 .map(PedidoDTO::fromEntity)
                 .toList();
     }
+
     @PreAuthorize("hasRole('COCINERO')")
     @GetMapping("/cocinero")
     public List<PedidoDTO> obtenerPedidosParaCocinero() {
@@ -73,7 +74,6 @@ public class PedidoController {
                 .map(PedidoDTO::fromEntity)
                 .toList();
     }
-
 
     @PutMapping("/{id}/preparando")
     @PreAuthorize("hasRole('COCINERO')")
@@ -84,10 +84,12 @@ public class PedidoController {
             return ResponseEntity.badRequest().body("El pedido no está pendiente.");
         }
 
+        pedidoService.descontarIngredientes(pedido);
         pedido.setEstado(EstadoPedido.EN_PREPARACION);
         pedidoRepository.save(pedido);
         return ResponseEntity.ok("Pedido marcado como en preparación");
     }
+
     @PutMapping("/{id}/listo")
     @PreAuthorize("hasRole('COCINERO')")
     public ResponseEntity<?> marcarComoListo(@PathVariable Long id) {
@@ -101,6 +103,4 @@ public class PedidoController {
         pedidoRepository.save(pedido);
         return ResponseEntity.ok("Pedido marcado como listo");
     }
-
-
 }

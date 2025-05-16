@@ -1,4 +1,6 @@
 package com.gastrobar_alemans_backend.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,12 +11,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MenuCategory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private List<MenuItemMODEL> items;
 
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<MenuItemMODEL> items;
 }

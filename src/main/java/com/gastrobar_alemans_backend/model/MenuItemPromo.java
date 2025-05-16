@@ -1,5 +1,6 @@
 package com.gastrobar_alemans_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -27,5 +28,6 @@ public class MenuItemPromo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_item_id")
+    @JsonIgnoreProperties({"promos", "ingredientes", "category"})
     private MenuItemMODEL menuItem;
 }

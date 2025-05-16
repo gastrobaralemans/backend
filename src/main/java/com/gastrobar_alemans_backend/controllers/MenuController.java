@@ -30,6 +30,13 @@ public class MenuController {
         System.out.println("MENÚ FINAL ENVIADO: " + menu);
         return ResponseEntity.ok(menu);
     }
+    @GetMapping("/platillos")
+    public List<MenuItemMODEL> getSoloPlatillos() {
+        return menuItemRepository.findAll().stream()
+                .filter(MenuItemMODEL::isActive)
+                .toList();
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/promo")
     public ResponseEntity<?> updatePromo(@PathVariable Long id, @RequestBody PromoDTO promoDTO) {

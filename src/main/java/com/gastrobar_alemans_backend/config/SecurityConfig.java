@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/menu/platillos").permitAll()
                 .requestMatchers("/api/menu/**").authenticated()
                 .requestMatchers("/api/posts/**").authenticated()
+                .requestMatchers("/api/pedidos/mesero").hasRole("MESERO")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

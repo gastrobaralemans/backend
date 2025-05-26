@@ -33,7 +33,7 @@ public class AuthController {
     public ResponseEntity<?> refreshToken(@RequestBody String refreshToken) {
         String correo = jwt.validateTokenAndRetrieveSubject(refreshToken);
         if (correo == null) {
-            return ResponseEntity.status(401).body("refresh token inválido o expirado");
+            return ResponseEntity.status(401).body("Refresh token expirado");
         }
 
         String newAccessToken = jwt.generateToken(correo);

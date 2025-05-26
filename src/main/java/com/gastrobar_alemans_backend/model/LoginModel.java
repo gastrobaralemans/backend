@@ -5,30 +5,24 @@ import jakarta.validation.constraints.NotBlank;
 
 public class LoginModel {
 
-    @NotBlank(message = "El correo es obligatorio")
-    @Email(message = "Debe ser un correo válido")
+    @NotBlank(message = "Correo obligatorio")
+    @Email(message = "Correo inválido")
     private String correo;
 
-    @NotBlank(message = "La contraseña es obligatoria")
+    @NotBlank(message = "Contraseña obligatoria")
     private String pass;
-
-    // Getters y Setters
     public String getCorreo() {
         return correo;
     }
-
     public void setCorreo(String correo) {
         this.correo = correo;
     }
-
     public String getPass() {
         return pass;
     }
-
     public void setPass(String pass) {
         this.pass = pass;
     }
-
     @Override
     public String toString() {
         return "LoginModel{" +

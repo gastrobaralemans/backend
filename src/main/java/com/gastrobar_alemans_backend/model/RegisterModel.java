@@ -5,18 +5,16 @@ import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotBlank;
 
 public class RegisterModel {
-    @NotBlank(message = "El nombre es obligatorio")
+    @NotBlank(message = "Nombre obligatorio")
     private String nombre;
 
-    @NotBlank(message = "El correo es obligatorio")
-    @Email(message = "Debe ser un correo válido")
+    @NotBlank(message = "Correo obligatorio")
+    @Email(message = "Correo inválido")
     private String correo;
 
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min=8, message ="la contraseña debera tener almenos 8 caracteres")
+    @NotBlank(message = "Contraseña obligatoria")
+    @Size(min=8, message ="La contraseña debera tener al menos 8 caracteres")
     private String pass;
-
-    // Getters y Setters
     public String getNombre() {
         return nombre;
     }

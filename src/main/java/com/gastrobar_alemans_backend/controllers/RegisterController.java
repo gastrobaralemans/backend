@@ -27,7 +27,7 @@ public class RegisterController {
     public ResponseEntity<String> register(@Valid @RequestBody RegisterModel request) {
         Optional<Person> existingPerson = personRepo.findByCorreo(request.getCorreo());
         if (existingPerson.isPresent()) {
-            return ResponseEntity.badRequest().body("El correo ya está registrado");
+            return ResponseEntity.badRequest().body("Correo ya registrado");
         }
 
         Person newPerson = new Person();

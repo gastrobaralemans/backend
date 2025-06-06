@@ -27,7 +27,6 @@ public class MenuController {
     @GetMapping
     public ResponseEntity<List<MenuCategoryDTO>> getMenu() {
         List<MenuCategoryDTO> menu = menuService.getFullMenu();
-        System.out.println("MENÚ FINAL ENVIADO: " + menu);
         return ResponseEntity.ok(menu);
     }
     @GetMapping("/platillos")
@@ -42,9 +41,8 @@ public class MenuController {
     public ResponseEntity<?> updatePromo(@PathVariable Long id, @RequestBody PromoDTO promoDTO) {
         Optional<MenuItemMODEL> itemOpt = menuItemRepository.findById(id);
         if (itemOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Platillo no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Platillo no encontrado.");
         }
-
         MenuItemMODEL item = itemOpt.get();
         MenuItemPromo promo = promoRepository.findByMenuItemId(item.getId()).orElse(new MenuItemPromo());
         promo.setMenuItem(item);
@@ -55,12 +53,12 @@ public class MenuController {
         promo.setActive(true);
 
         promoRepository.save(promo);
-        return ResponseEntity.ok("Promo creada/actualizada");
+        return ResponseEntity.ok("Promoción creada/actualizada.");
     }
     @DeleteMapping("/{id}/promo")
     public ResponseEntity<?> deletePromo(@PathVariable Long id) {
         promoRepository.deleteByMenuItemId(id);
-        return ResponseEntity.ok("Promo eliminada");
+        return ResponseEntity.ok("Haz eliminado la promoción");
     }
 
 }

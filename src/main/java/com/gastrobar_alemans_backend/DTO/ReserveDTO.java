@@ -5,28 +5,26 @@ import java.time.LocalDateTime;
 
 public class ReserveDTO {
 
-    @NotBlank(message = "telefono obligatorio")
-    @Pattern(regexp = "\\d{8}", message = "telefono debe de tener solo 8 caracteres")
+    @NotBlank(message = "Telefono obligatorio.")
+    @Pattern(regexp = "\\d{8}", message = "Telefono debe tener 8 caracteres.")
     private String numero;
 
-    @NotNull(message = "fecha obligatoria")
-    @Future(message = "la fecha tiene q ser futura")
+    @NotNull(message = "Fecha obligatoria.")
+    @Future(message = "La fecha debe ser futura.")
     private LocalDateTime fecha;
 
-    @Min(value = 1, message = "debes agrgar al menos una persona")
-    @Max(value = 20, message = "maximo 20 personas")
+    @Min(value = 1, message = "Debes añadir al menos un invitado.")
+    @Max(value = 20, message = "Maximo 20 invitados.")
     private int cantidad;
 
-    @Size(max = 100, message = "el campo no puede exceder los 100 caracteres")
+    @Size(max = 100, message = "100 carácteres maximo.")
     private String decoracion;
 
-    @Size(max = 100, message = "el campo no puede exceder los 100 caracteres")
+    @Size(max = 100, message = "100 carácteres maximo.")
     private String comentarios;
 
-    @NotBlank(message = "seleccione el tipo de evento")
+    @NotBlank(message = "Selecciona un evento.")
     private String tipoEvento;
-
-    // --- Getters y Setters ---
 
     public String getNumero() { return numero; }
     public void setNumero(String numero) { this.numero = numero; }

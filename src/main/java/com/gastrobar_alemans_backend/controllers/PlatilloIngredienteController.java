@@ -25,18 +25,14 @@ public class PlatilloIngredienteController {
         MenuItemMODEL platillo = platilloRepo.findById(platilloId).orElseThrow();
         return recetaRepo.findByPlatillo(platillo);
     }
-
     @PostMapping
     public ResponseEntity<?> agregarIngredienteAPlatillo(@RequestBody PlatilloIngrediente receta) {
         System.out.println("Recibido: " + receta);
         if (receta.getPlatillo() == null || receta.getIngrediente() == null) {
-            return ResponseEntity.badRequest().body("Faltan datos para guardar receta");
+            return ResponseEntity.badRequest().body("Faltan datos para guardar receta.");
         }
         return ResponseEntity.ok(recetaRepo.save(receta));
     }
-
-
-
     @DeleteMapping("/{id}")
     public void eliminarIngredienteDePlatillo(@PathVariable Long id) {
         recetaRepo.deleteById(id);

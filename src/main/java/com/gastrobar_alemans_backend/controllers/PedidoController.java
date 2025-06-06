@@ -2,7 +2,6 @@ package com.gastrobar_alemans_backend.controllers;
 
 import com.gastrobar_alemans_backend.DTO.PedidoDTO;
 import com.gastrobar_alemans_backend.DTO.PedidosMeseroRequestDTO;
-import com.gastrobar_alemans_backend.DTO.PlatilloCantidadDTO;
 import com.gastrobar_alemans_backend.model.*;
 import com.gastrobar_alemans_backend.repository.*;
 import com.gastrobar_alemans_backend.service.PedidoService;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/pedidos")
 @RequiredArgsConstructor
@@ -49,7 +46,7 @@ public class PedidoController {
         pedido.setDetalles(detalles);
         pedidoRepository.save(pedido);
 
-        return ResponseEntity.ok("Pedido creado");
+        return ResponseEntity.ok("Pedido creado.");
     }
 
     @PutMapping("/{id}/entregado")
@@ -58,7 +55,7 @@ public class PedidoController {
         Pedido pedido = pedidoRepository.findById(id).orElseThrow();
         pedido.setEstado(EstadoPedido.ENTREGADO);
         pedidoRepository.save(pedido);
-        return ResponseEntity.ok("Pedido marcado como entregado");
+        return ResponseEntity.ok("Pedido marcado como entregado.");
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('COCINERO')or hasRole('MESERO')")
@@ -90,9 +87,6 @@ public class PedidoController {
                 .toList();
     }
 
-
-
-
     @PutMapping("/{id}/preparando")
     @PreAuthorize("hasRole('COCINERO')")
     public ResponseEntity<?> marcarComoEnPreparacion(@PathVariable Long id) {
@@ -105,7 +99,7 @@ public class PedidoController {
         pedidoService.descontarIngredientes(pedido);
         pedido.setEstado(EstadoPedido.EN_PREPARACION);
         pedidoRepository.save(pedido);
-        return ResponseEntity.ok("Pedido marcado como en preparación");
+        return ResponseEntity.ok("Pedido en preparación");
     }
 
     @PutMapping("/{id}/listo")
@@ -119,7 +113,7 @@ public class PedidoController {
 
         pedido.setEstado(EstadoPedido.LISTO);
         pedidoRepository.save(pedido);
-        return ResponseEntity.ok("Pedido marcado como listo");
+        return ResponseEntity.ok("Pedido listo.");
     }
     @PostMapping("/mesero")
     @PreAuthorize("hasRole('MESERO')")
@@ -143,7 +137,7 @@ public class PedidoController {
         pedido.setDetalles(detalles);
         pedidoRepository.save(pedido);
 
-        return ResponseEntity.ok("Pedido del mesero creado");
+        return ResponseEntity.ok("Mesero ha enviado un pedido.");
     }
 
 

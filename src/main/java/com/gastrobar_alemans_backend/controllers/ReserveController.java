@@ -39,7 +39,7 @@ public class ReserveController {
             String correo = auth.getName();
             Optional<Person> usuarioOpt = personRepository.findByCorreo(correo);
             if (usuarioOpt.isEmpty()) {
-                return ResponseEntity.status(403).body("Usuario sin autorización");
+                return ResponseEntity.status(403).body("Usuario sin autorización.");
             }
 
             Person usuario = usuarioOpt.get();
@@ -50,9 +50,8 @@ public class ReserveController {
             );
 
             if (numeroEnUso) {
-                return ResponseEntity.badRequest().body("Ese número ya está en uso en una reserva activa.");
+                return ResponseEntity.badRequest().body("Ese número fue registrado por otro usuario.");
             }
-
 
             List<Reserve> reservasExistentes = reserveRepository.findByCorreoAndEstadoIn(
                     correo, List.of("pendiente", "aceptado")
@@ -61,12 +60,12 @@ public class ReserveController {
             LocalDateTime ahora = LocalDateTime.now();
             for (Reserve r : reservasExistentes) {
                 if (r.getFecha().isAfter(ahora)) {
-                    return ResponseEntity.badRequest().body("Ya tienes una solicitud de reserva activa");
+                    return ResponseEntity.badRequest().body("Ya tienes una solicitud de reserva activa.");
                 }
             }
 
             if (reservaDTO.getFecha().toLocalDate().isBefore(ahora.plusDays(1).toLocalDate())) {
-                return ResponseEntity.badRequest().body("Debes reservar al menos con un día de anticipación");
+                return ResponseEntity.badRequest().body("Debes reservar al menos con un día de anticipación.");
             }
 
             Reserve nuevaReserva = new Reserve();
@@ -83,46 +82,38 @@ public class ReserveController {
 
             reserveRepository.save(nuevaReserva);
 
-            return ResponseEntity.ok("Reserva registrada correctamente");
+            return ResponseEntity.ok("Reserva registrada.");
 
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error interno: " + e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 
     @GetMapping
     public ResponseEntity<?> listarReservas() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("Usuario autenticado: " + auth.getName());
-        System.out.println("Roles: " + auth.getAuthorities());
-
         boolean esAdmin = auth.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
         if (!esAdmin) {
-            return ResponseEntity.status(403).body("No autorizado");
+            return ResponseEntity.status(403).body("No autorizado.");
         }
 
         List<Reserve> reservas = reserveRepository.findAll();
         return ResponseEntity.ok(reservas);
     }
-
     @PutMapping("/{id}/aceptar")
     public ResponseEntity<?> aceptarReserva(@PathVariable Long id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("Usuario autenticado: " + auth.getName());
-        System.out.println("Roles: " + auth.getAuthorities());
-
         boolean esAdmin = auth.getAuthorities().stream()
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
         if (!esAdmin) {
-            return ResponseEntity.status(403).body("No autorizado");
+            return ResponseEntity.status(403).body("No autorizado.");
         }
-
         Optional<Reserve> reservaOpt = reserveRepository.findById(id);
         if (reservaOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Reserva no encontrada");
+            return ResponseEntity.badRequest().body("Reserva no encontrada.");
         }
 
         Reserve reserva = reservaOpt.get();
@@ -130,11 +121,10 @@ public class ReserveController {
         reserva.setEstado("aceptado");
         reserveRepository.save(reserva);
 
-        // Crear la notificación solo si hay usuario receptor
         if (reserva.getUsuario() != null) {
             Notis noti = new Notis(
-                    "¡Reserva aceptada!",
-                    "Tu reserva para " + reserva.getTipoEvento() + " fue aceptada",
+                    "Reserva aceptada",
+                    "Tu reserva para " + reserva.getTipoEvento() + " fue aceptada.",
                     reserva.getUsuario(),
                     reserva.getCantidad(),
                     reserva.getComentarios(),
@@ -146,14 +136,10 @@ public class ReserveController {
                     reserva.getTipoEvento()
             );
             notisRepository.save(noti);
-
             notisRepository.save(noti);
-            System.out.println("Notificación guardada exitosamente.");
-        } else {
-            System.out.println("No se pudo crear la notificación porque no hay usuario receptor.");
         }
 
-        return ResponseEntity.ok("Reserva aceptada");
+        return ResponseEntity.ok("Reserva aceptada.");
     }
 
     @PutMapping("/{id}/rechazar")
@@ -164,28 +150,25 @@ public class ReserveController {
                 .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
 
         if (!esAdmin) {
-            return ResponseEntity.status(403).body("No autorizado");
+            return ResponseEntity.status(403).body("No autorizado.");
         }
 
         Optional<Reserve> reservaOpt = reserveRepository.findById(id);
         if (reservaOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Reserva no encontrada");
+            return ResponseEntity.badRequest().body("Reserva no encontrada.");
         }
 
         Reserve reserva = reservaOpt.get();
-        System.out.println("Chequeo: reserva.getUsuario() = " + reserva.getUsuario());
         if (reserva.getUsuario() != null) {
-            System.out.println("Chequeo: correo receptor = " + reserva.getUsuario().getCorreo());
-        } else {
-            System.out.println("Chequeo: NO HAY USUARIO EN ESTA RESERVA");
+            System.out.println(reserva.getUsuario().getCorreo());
         }
 
         reserva.setEstado("rechazado");
         reserveRepository.save(reserva);
         if (reserva.getUsuario() != null) {
             Notis noti = new Notis(
-                    "¡Reserva aceptada!",
-                    "Tu reserva para " + reserva.getTipoEvento() + " fue rechazada",
+                    "Reserva rechazada",
+                    "Tu reserva para " + reserva.getTipoEvento() + " fue rechazada.",
                     reserva.getUsuario(),
                     reserva.getCantidad(),
                     reserva.getComentarios(),
@@ -197,25 +180,17 @@ public class ReserveController {
                     reserva.getTipoEvento()
             );
             notisRepository.save(noti);
-
             notisRepository.save(noti);
-            System.out.println("Notificación guardada exitosamente.");
-        } else {
-            System.out.println("No se pudo crear la notificación porque no hay usuario receptor.");
         }
 
-        return ResponseEntity.ok("Reserva rechazada");
+        return ResponseEntity.ok("Reserva rechazada.");
     }
 
     @GetMapping("/notificaciones")
     public ResponseEntity<?> obtenerNotificaciones() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String correo = auth.getName();
-
-        System.out.println("Buscando notificaciones para: " + correo);
-
         List<Notis> notis = notisRepository.buscarPorCorreo(correo);
-
         return ResponseEntity.ok(notis);
     }
 }

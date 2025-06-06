@@ -33,7 +33,7 @@ public class AuthController {
     public ResponseEntity<?> refreshToken(@RequestBody String refreshToken) {
         String correo = jwt.validateTokenAndRetrieveSubject(refreshToken);
         if (correo == null) {
-            return ResponseEntity.status(401).body("Refresh token expirado");
+            return ResponseEntity.status(401).body("Refresh token expirado.");
         }
 
         String newAccessToken = jwt.generateToken(correo);
@@ -44,15 +44,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginModel request) {
         Optional<Person> personaDb = personRepo.findByCorreo(request.getCorreo());
-
-
         if (personaDb.isEmpty()) {
-            return ResponseEntity.status(401).body("Correo no registrado");
+            return ResponseEntity.status(401).body("Correo no registrado.");
         }
 
         Person user = personaDb.get();
         if (!passwordEncoder.matches(request.getPass(), user.getPass())) {
-            return ResponseEntity.status(401).body("Contraseña incorrecta");
+            return ResponseEntity.status(401).body("Contraseña incorrecta.");
         }
 
         String token = jwt.generateToken(user.getCorreo());

@@ -38,6 +38,5 @@ public class Person {
         this.pass = pass;
     }
 
-
-
 }
+

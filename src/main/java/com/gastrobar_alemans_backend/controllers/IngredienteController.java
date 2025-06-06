@@ -42,7 +42,7 @@ public class IngredienteController {
         recetaRepo.deleteAll(relaciones);
         ingredienteRepository.deleteById(id);
 
-        return ResponseEntity.ok("Ingrediente eliminado correctamente.");
+        return ResponseEntity.ok("Ingrediente eliminado.");
     }
 
 }

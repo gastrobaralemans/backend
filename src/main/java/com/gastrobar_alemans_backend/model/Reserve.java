@@ -105,9 +105,10 @@ public class Reserve {
     }
 
     public void setTipoEvento(String tipoEvento) {
-        this.tipoEvento = tipoEvento;
+        if (tipoEvento != null) {
+            this.tipoEvento = tipoEvento.toLowerCase();
+        }
     }
-
     public String getEstado() {
         return estado;
     }

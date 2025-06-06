@@ -41,3 +41,4 @@ public class RegisterController {
         return ResponseEntity.ok("Registro exitoso");
     }
 }
+

@@ -31,8 +31,14 @@ public class IngredienteController {
     @PutMapping("/{id}")
     public Ingrediente actualizar(@PathVariable Long id, @RequestBody Ingrediente ingrediente) {
         Ingrediente existente = ingredienteRepository.findById(id).orElseThrow();
-        existente.setNombre(ingrediente.getNombre());
-        existente.setCantidadDisponible(ingrediente.getCantidadDisponible());
+
+        if (ingrediente.getNombre() != null) {
+            existente.setNombre(ingrediente.getNombre());
+        }
+        if (ingrediente.getCantidadDisponible() != null) {
+            existente.setCantidadDisponible(ingrediente.getCantidadDisponible());
+        }
+
         return ingredienteRepository.save(existente);
     }
 
@@ -41,8 +47,6 @@ public class IngredienteController {
         List<PlatilloIngrediente> relaciones = recetaRepo.findByIngredienteId(id);
         recetaRepo.deleteAll(relaciones);
         ingredienteRepository.deleteById(id);
-
         return ResponseEntity.ok("Ingrediente eliminado.");
     }
-
 }

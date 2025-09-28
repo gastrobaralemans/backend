@@ -12,6 +12,6 @@ public class Ingrediente {
     private Long id;
 
     private String nombre;
-    private int cantidadDisponible;
-    private int stockMinimo = 5;
+    private Integer cantidadDisponible;
+    private Integer stockMinimo = 5;
 }

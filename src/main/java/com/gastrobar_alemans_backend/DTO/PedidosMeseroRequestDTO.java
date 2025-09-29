@@ -5,5 +5,10 @@ import java.util.List;
 
 @Data
 public class PedidosMeseroRequestDTO {
-    private List<PlatilloCantidadDTO> platillos;
+    private List<PedidoItemDTO> platillos;
+    public PedidosMeseroRequestDTO() {}
+
+    public PedidosMeseroRequestDTO(List<PedidoItemDTO> platillos) {
+        this.platillos = platillos;
+    }
 }

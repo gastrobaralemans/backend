@@ -20,7 +20,6 @@ public class PedidoDTO {
         private String nombrePlatillo;
         private int cantidad;
         private double precio;
-
     }
 
     public static PedidoDTO fromEntity(Pedido pedido) {
@@ -31,13 +30,18 @@ public class PedidoDTO {
 
         dto.setCliente(pedido.getCliente() != null ? pedido.getCliente().getNombre() : "Anonimo");
 
-        dto.setDetalles(pedido.getDetalles().stream().map(detalle -> {
-            DetalleDTO d = new DetalleDTO();
-            d.setNombrePlatillo(detalle.getPlatillo().getName());
-            d.setCantidad(detalle.getCantidad());
-            d.setPrecio(detalle.getPlatillo().getPrice().doubleValue());
-            return d;
-        }).collect(Collectors.toList()));
+
+        if (pedido.getDetalles() != null) {
+            dto.setDetalles(pedido.getDetalles().stream().map(detalle -> {
+                DetalleDTO d = new DetalleDTO();
+                d.setNombrePlatillo(detalle.getPlatillo() != null ? detalle.getPlatillo().getName() : "Platillo no disponible");
+                d.setCantidad(detalle.getCantidad());
+                d.setPrecio(detalle.getPrecioUnitario() != null ? detalle.getPrecioUnitario().doubleValue() : 0.0);
+                return d;
+            }).collect(Collectors.toList()));
+        } else {
+            dto.setDetalles(List.of());
+        }
 
         return dto;
     }

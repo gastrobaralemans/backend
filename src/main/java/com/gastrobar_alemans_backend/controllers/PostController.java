@@ -7,6 +7,7 @@ import com.gastrobar_alemans_backend.repository.PersonRepository;
 import com.gastrobar_alemans_backend.repository.PostRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -29,6 +30,20 @@ public class PostController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<?> crearPost(@Valid @RequestBody Map<String, String> data) {
+        // Verificación manual de seguridad para que funcione en tests
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario no autenticado");
+        }
+
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permisos para crear posts");
+        }
+
         String titulo = data.get("titulo");
         String imagen = data.get("imagen");
         String descripcion = data.get("descripcion");
@@ -62,11 +77,16 @@ public class PostController {
     @PostMapping("/{id}/comentarios")
     public ResponseEntity<?> crearComentario(@PathVariable Long id, @RequestBody Map<String, String> data) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth == null || !auth.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario no autorizado");
+        }
+
         String correo = auth.getName();
 
         Optional<Person> usuarioOpt = personRepository.findByCorreo(correo);
         if (usuarioOpt.isEmpty()) {
-            return ResponseEntity.status(403).body("Usuario no autorizado");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuario no autorizado");
         }
 
         Optional<Post> postOpt = postRepository.findById(id);

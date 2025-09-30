@@ -64,7 +64,8 @@ public class ReserveController {
                 }
             }
 
-            if (reservaDTO.getFecha().toLocalDate().isBefore(ahora.plusDays(1).toLocalDate())) {
+            LocalDateTime fechaMinima = ahora.plusDays(1);
+            if (reservaDTO.getFecha().isBefore(fechaMinima)) {
                 return ResponseEntity.badRequest().body("Debes reservar al menos con un día de anticipación.");
             }
 

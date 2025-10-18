@@ -1,4 +1,6 @@
 package com.gastrobar_alemans_backend.controllers;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.gastrobar_alemans_backend.model.Comentario;
 import com.gastrobar_alemans_backend.model.Person;
 import com.gastrobar_alemans_backend.model.Post;
@@ -8,12 +10,15 @@ import com.gastrobar_alemans_backend.repository.PostRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 @RestController
 @RequestMapping("/api/posts")
@@ -27,10 +32,12 @@ public class PostController {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private Cloudinary cloudinary;
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<?> crearPost(@Valid @RequestBody Map<String, String> data) {
-        // Verificación manual de seguridad para que funcione en tests
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth == null || !auth.isAuthenticated()) {
@@ -99,6 +106,21 @@ public class PostController {
         comentarioRepository.save(comentario);
 
         return ResponseEntity.ok("Comentario creado correctamente");
+    }
+    @PostMapping(value = "/upload-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+        if (file.getSize() > 2_000_000)  // 2 MB
+            return ResponseEntity.badRequest().body("Tamaño máximo 2 MB");
+        if (!Set.of("image/jpeg","image/png","image/webp").contains(file.getContentType()))
+            return ResponseEntity.badRequest().body("Formato no permitido");
+
+        Map params = ObjectUtils.asMap(
+                "folder", "gastrobar/posts",
+                "resource_type", "image");
+        Map result = cloudinary.uploader().upload(file.getBytes(), params);
+        String url = (result.get("secure_url")).toString();
+        return ResponseEntity.ok(Map.of("url", url));
     }
 
 }

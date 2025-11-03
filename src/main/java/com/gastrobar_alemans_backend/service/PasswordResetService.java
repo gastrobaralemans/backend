@@ -18,17 +18,17 @@ public class PasswordResetService {
     private final PersonRepository personRepository;
 
     public void generateAndSend(String email) throws Exception {
+        email = email.trim().toLowerCase();
+
         String code = String.format("%06d", new SecureRandom().nextInt(1_000_000));
         LocalDateTime expiry = LocalDateTime.now().plusMinutes(10);
 
-        PasswordResetToken token = tokenRepo.findById(email)
-                .orElse(new PasswordResetToken());
-        token.setEmail(email);
-        token.setCode(code);
-        token.setExpiry(expiry);
+        tokenRepo.deleteById(email);
+        PasswordResetToken token = new PasswordResetToken(email, code, expiry);
         tokenRepo.save(token);
         mailService.sendCode(email, code);
     }
+
 
     public boolean verify(String email, String code) {
         return tokenRepo.findById(email)

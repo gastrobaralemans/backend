@@ -3,6 +3,7 @@ import com.gastrobar_alemans_backend.model.PasswordResetToken;
 import com.gastrobar_alemans_backend.repository.PasswordResetTokenRepository;
 import com.gastrobar_alemans_backend.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +47,16 @@ public class PasswordResetService {
         });
 
         tokenRepo.delete(t);
+    }
+
+    @Scheduled(cron = "0 0 * * * *")
+    public void cleanExpiredTokens() {
+        var tokens = tokenRepo.findAll();
+
+        tokens.stream()
+                .filter(PasswordResetToken::isExpired)
+                .forEach(tokenRepo::delete);
+
+        System.out.println("[CLEANUP] Tokens expirados eliminados: " + tokens.size());
     }
 }

@@ -1,4 +1,5 @@
 package com.gastrobar_alemans_backend.service;
+
 import com.gastrobar_alemans_backend.model.PasswordResetToken;
 import com.gastrobar_alemans_backend.repository.PasswordResetTokenRepository;
 import com.gastrobar_alemans_backend.repository.PersonRepository;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class PasswordResetService {
+
     private final PasswordResetTokenRepository tokenRepo;
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
@@ -30,7 +32,6 @@ public class PasswordResetService {
         mailService.sendCode(email, code);
     }
 
-
     public boolean verify(String email, String code) {
         return tokenRepo.findById(email)
                 .filter(t -> t.getCode().equals(code) && !t.isExpired())
@@ -41,6 +42,7 @@ public class PasswordResetService {
         PasswordResetToken t = tokenRepo.findById(email)
                 .filter(tok -> tok.getCode().equals(code) && !tok.isExpired())
                 .orElseThrow(() -> new IllegalArgumentException("Código inválido o expirado"));
+
         personRepository.findByCorreo(email).ifPresent(p -> {
             p.setPass(passwordEncoder.encode(rawPassword));
             personRepository.save(p);
@@ -48,15 +50,9 @@ public class PasswordResetService {
 
         tokenRepo.delete(t);
     }
-
     @Scheduled(cron = "0 0 * * * *")
     public void cleanExpiredTokens() {
-        var tokens = tokenRepo.findAll();
-
-        tokens.stream()
-                .filter(PasswordResetToken::isExpired)
-                .forEach(tokenRepo::delete);
-
-        System.out.println("[CLEANUP] Tokens expirados eliminados: " + tokens.size());
+        tokenRepo.deleteExpiredTokens();
+        System.out.println("[CLEANUP] Tokens expirados eliminados correctamente.");
     }
 }
